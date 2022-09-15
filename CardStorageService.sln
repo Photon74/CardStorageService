@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardStorageService", "CardStorageService\CardStorageService.csproj", "{6DE59385-64E8-4A27-A746-6B3FD24340FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardStorageService.Data", "CardStorageService.Data\CardStorageService.Data.csproj", "{458A1175-C224-4716-9541-50062EE7A764}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DE59385-64E8-4A27-A746-6B3FD24340FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DE59385-64E8-4A27-A746-6B3FD24340FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DE59385-64E8-4A27-A746-6B3FD24340FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DE59385-64E8-4A27-A746-6B3FD24340FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458A1175-C224-4716-9541-50062EE7A764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458A1175-C224-4716-9541-50062EE7A764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458A1175-C224-4716-9541-50062EE7A764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458A1175-C224-4716-9541-50062EE7A764}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4452CE8-90E7-47D1-8AA3-237913F65DD7}
+	EndGlobalSection
+EndGlobal
