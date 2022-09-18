@@ -34,6 +34,8 @@ namespace CardStorageService.Controllers
                     ExpDate = request.ExpDate,
                     CVV2 = request.CVV2
                 });
+
+                _logger.LogInformation("New card created!");
                 return Ok(new CreateCardResponse
                 {
                     CardId = cardId.ToString(),
