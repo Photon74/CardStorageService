@@ -3,7 +3,7 @@ using System.Text;
 
 namespace CardStorageService.Utils
 {
-    public class PasswordUtils
+    public static class PasswordUtils
     {
         private const string SecretKey = "1e0y~s3lHdt?YNxPkqrUme~g";
 
