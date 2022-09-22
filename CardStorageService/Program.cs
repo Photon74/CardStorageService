@@ -48,6 +48,12 @@ namespace CardStorageService
 
             #endregion
 
+            #region Configure Services
+
+            builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+
+            #endregion
+
             builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
