@@ -3,12 +3,14 @@ using CardStorageService.Models.Requests;
 using CardStorageService.Models.Responses;
 using CardStorageService.Services;
 using Castle.Core.Internal;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 
 namespace CardStorageService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
@@ -20,6 +22,7 @@ namespace CardStorageService.Controllers
             _authenticateService = authenticateService;
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login([FromBody] AuthenticationRequest authenticationRequest)
         {
@@ -45,10 +48,10 @@ namespace CardStorageService.Controllers
                     return Unauthorized();
 
                 var sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
-                if (sessionInfo == null)
-                    return Unauthorized();
 
-                return Ok(sessionInfo);
+                return sessionInfo == null
+                    ? Unauthorized()
+                    : Ok(sessionInfo);
             }
 
             return Unauthorized();

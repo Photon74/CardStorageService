@@ -14,7 +14,7 @@ namespace CardStorageService.Services.Imp
     {
         private readonly IDictionary<string, SessionInfo> _sessionsCache = new Dictionary<string, SessionInfo>();
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private const string SecretCode = "z63H~i0}ZxIQlQpu";
+        public const string SecretCode = "z63H~i0}ZxIQlQpu";
 
         public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
         {

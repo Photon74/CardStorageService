@@ -1,8 +1,12 @@
 using CardStorageService.Data;
 using CardStorageService.Services;
 using CardStorageService.Services.Imp;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using NLog.Web;
+using System.Text;
 
 namespace CardStorageService
 {
@@ -54,11 +58,60 @@ namespace CardStorageService
 
             #endregion
 
+
+            #region Configure JWT Token
+
+            builder.Services.AddAuthentication(op =>
+            {
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(op =>
+            {
+                op.RequireHttpsMetadata = false;
+                op.SaveToken = true;
+                op.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretCode)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
+
+            #endregion
+
             builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(op =>
+            {
+                op.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Card Storage Service" });
+                op.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Описание",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                op.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             var app = builder.Build();
 
@@ -69,6 +122,9 @@ namespace CardStorageService
                 app.UseSwaggerUI();
             }
 
+            app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseHttpLogging();
 
