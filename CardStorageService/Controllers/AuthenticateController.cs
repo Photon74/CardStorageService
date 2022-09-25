@@ -43,7 +43,8 @@ namespace CardStorageService.Controllers
             {
                 var scheme = headerValue.Scheme; // "Bearer"
                 var sessionToken = headerValue.Parameter; // Token
-                //if (sessionToken.IsNullOrEmpty()) return Unauthorized();
+
+                //if (sessionToken.IsNullOrEmpty()) return Unauthorized(); // Так тоже можно?
                 if (string.IsNullOrEmpty(sessionToken))
                     return Unauthorized();
 
