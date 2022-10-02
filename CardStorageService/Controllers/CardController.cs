@@ -1,4 +1,5 @@
-﻿using CardStorageService.Data;
+﻿using AutoMapper;
+using CardStorageService.Data;
 using CardStorageService.Models;
 using CardStorageService.Models.Requests;
 using CardStorageService.Models.Responses;
@@ -17,14 +18,17 @@ namespace CardStorageService.Controllers
         private readonly ILogger<CardController> _logger;
         private readonly ICardRepositoryService _cardRepositoryService;
         private readonly IValidator<CreateCardRequest> _createCardValidator;
+        private readonly IMapper _mapper;
 
         public CardController(ILogger<CardController> logger,
                               ICardRepositoryService cardRepositoryService,
-                              IValidator<CreateCardRequest> createCardValidator)
+                              IValidator<CreateCardRequest> createCardValidator,
+                              IMapper mapper)
         {
             _logger = logger;
             _cardRepositoryService = cardRepositoryService;
             _createCardValidator = createCardValidator;
+            _mapper = mapper;
         }
 
         [HttpPost("Create")]
@@ -36,14 +40,7 @@ namespace CardStorageService.Controllers
 
             try
             {
-                var cardId = _cardRepositoryService.Create(new Card
-                {
-                    ClientId = request.ClientId,
-                    Name = request.Name,
-                    CardNo = request.CardNo,
-                    ExpDate = request.ExpDate,
-                    CVV2 = request.CVV2
-                });
+                var cardId = _cardRepositoryService.Create(_mapper.Map<Card>(request));
 
                 _logger.LogInformation("New card created!");
                 return Ok(new CreateCardResponse
@@ -71,14 +68,7 @@ namespace CardStorageService.Controllers
                 var cards = _cardRepositoryService.GetByClientId(clientId);
                 return Ok(new GetCardsResponse
                 {
-                    Cards = cards.Select(card => new CardDto
-                    {
-                        CardNo = card.CardNo,
-                        CVV2 = card.CVV2,
-                        Name = card.Name,
-                        ExpDate = card.ExpDate.ToString("MM/yy")
-
-                    }).ToList()
+                    Cards = _mapper.Map<List<CardDto>>(cards)
                 });
             }
             catch (Exception e)
