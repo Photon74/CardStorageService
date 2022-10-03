@@ -1,6 +1,11 @@
+using AutoMapper;
 using CardStorageService.Data;
+using CardStorageService.Mapper;
+using CardStorageService.Models.Requests;
+using CardStorageService.Models.Validators;
 using CardStorageService.Services;
 using CardStorageService.Services.Imp;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +20,19 @@ namespace CardStorageService
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            #region Configure Validator
+
+            builder.Services.AddScoped<IValidator<AuthenticationRequest>, AuthenticationRequestValidator>();
+
+            #endregion
+
+            #region Configure Mapping
+
+            var mapperConfiguration = new MapperConfiguration(m => m.AddProfile(new MapperProfile()));
+            builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
+
+            #endregion
 
             #region Loggin Service
 
@@ -58,7 +76,6 @@ namespace CardStorageService
 
             #endregion
 
-
             #region Configure JWT Token
 
             builder.Services.AddAuthentication(op =>
@@ -84,7 +101,6 @@ namespace CardStorageService
 
             builder.Services.AddControllers();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(op =>
             {

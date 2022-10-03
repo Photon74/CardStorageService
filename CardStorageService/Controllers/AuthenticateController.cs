@@ -3,6 +3,7 @@ using CardStorageService.Models.Requests;
 using CardStorageService.Models.Responses;
 using CardStorageService.Services;
 using Castle.Core.Internal;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,22 @@ namespace CardStorageService.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticateService _authenticateService;
+        private readonly IValidator<AuthenticationRequest> _validator;
 
-        public AuthenticateController(IAuthenticateService authenticateService)
+        public AuthenticateController(IAuthenticateService authenticateService,
+                                      IValidator<AuthenticationRequest> validator)
         {
             _authenticateService = authenticateService;
+            _validator = validator;
         }
 
         [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login([FromBody] AuthenticationRequest authenticationRequest)
         {
+            var validationResult = _validator.Validate(authenticationRequest);
+            if (!validationResult.IsValid) return BadRequest(validationResult.ToDictionary());
+
             AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
             if (authenticationResponse.Status == AuthenticationStatus.Success)
             {
@@ -44,7 +51,6 @@ namespace CardStorageService.Controllers
                 var scheme = headerValue.Scheme; // "Bearer"
                 var sessionToken = headerValue.Parameter; // Token
 
-                //if (sessionToken.IsNullOrEmpty()) return Unauthorized(); // Так тоже можно?
                 if (string.IsNullOrEmpty(sessionToken))
                     return Unauthorized();
 
