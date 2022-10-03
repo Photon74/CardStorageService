@@ -21,7 +21,13 @@ namespace CardStorageService.Services.Imp
             var response = new GetByClientIdResponse();
             var cards = _cardRepositoryService.GetByClientId(request.ClientId);
 
-            response.Cards.AddRange(_mapper.Map<List<Card>>(cards));
+            response.Cards.AddRange(cards.Select(card => new Card
+            {
+                CardNo = card.CardNo,
+                Name = card.Name,
+                ExpDate = card.ExpDate.ToShortDateString(),
+                CVV2 = card.CVV2
+            }).ToList());
 
             return Task.FromResult(response);
         }

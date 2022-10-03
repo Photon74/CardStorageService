@@ -158,7 +158,14 @@ namespace CardStorageService
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseHttpLogging();
+
+            app.UseWhen(x => x.Request.ContentType != "application/grpc",
+                app =>
+                {
+                    app.UseHttpLogging();
+                });
+
+            // app.UseHttpLogging(); - обещали исправить в .NET 7
 
             app.UseEndpoints(endpoints =>
             {
