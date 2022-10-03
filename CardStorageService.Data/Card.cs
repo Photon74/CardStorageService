@@ -23,7 +23,7 @@ namespace CardStorageService.Data
 
         [Column]
         [StringLength(50)]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Column]
         [StringLength(50)]

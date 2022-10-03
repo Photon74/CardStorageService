@@ -13,6 +13,9 @@ namespace CardStorageService.Mapper
             CreateMap<CreateCardRequest, Card>();
 
             CreateMap<CreateClientRequest, Client>();
+
+            CreateMap<Protos.CreateClientRequest, Client>();
+            CreateMap<Card, Protos.Card>();
         }
     }
 }
